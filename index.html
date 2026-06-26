@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DrawRef — Drawing Reference</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <button class="brand" data-section="home">✏️ DrawRef</button>
+    <nav class="mainnav">
+      <button class="navbtn active" data-section="home">Home</button>
+      <button class="navbtn" data-section="grid">Grid &amp; Guides</button>
+      <button class="navbtn" data-section="palette">Color Palette</button>
+      <button class="navbtn" data-section="poses">Pose Reference</button>
+      <button class="navbtn" data-section="styles">Art Styles</button>
+      <button class="navbtn" data-section="tutorials">Tutorials</button>
+    </nav>
+    <button id="themeToggle" class="theme-toggle" title="Toggle light/dark">🌙</button>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <section id="home" class="section active">
+      <div class="hero">
+        <span class="hero-badge">✦ Free · runs entirely in your browser</span>
+        <h1>Your drawing reference toolkit</h1>
+        <p class="lede">Everything you need to practice — grids, color, poses, and guided tutorials, all in one place.</p>
+        <div class="hero-actions">
+          <button class="btn primary" data-section="grid">Start drawing</button>
+          <button class="btn" data-section="styles">Browse styles</button>
+        </div>
+      </div>
+      <div class="home-grid">
+        <button class="home-card" data-section="grid">
+          <canvas class="home-canvas" data-preview="grid" width="600" height="280"></canvas>
+          <span class="home-body">
+            <span class="home-title">Grid &amp; Guides</span>
+            <span class="home-desc">Draw on a customizable grid with symmetry guides — or trace a pose reference.</span>
+            <span class="home-go">Open →</span>
+          </span>
+        </button>
+        <button class="home-card" data-section="palette">
+          <canvas class="home-canvas" data-preview="palette" width="600" height="280"></canvas>
+          <span class="home-body">
+            <span class="home-title">Color Palette</span>
+            <span class="home-desc">Generate harmonious color schemes — complementary, analogous, skin tones, and more.</span>
+            <span class="home-go">Open →</span>
+          </span>
+        </button>
+        <button class="home-card" data-section="poses">
+          <canvas class="home-canvas" data-preview="poses" width="600" height="280"></canvas>
+          <span class="home-body">
+            <span class="home-title">Pose Reference</span>
+            <span class="home-desc">Browse mannequin poses for figures, animals, and action — then trace them on the grid.</span>
+            <span class="home-go">Open →</span>
+          </span>
+        </button>
+        <button class="home-card" data-section="tutorials">
+          <canvas class="home-canvas" data-preview="tutorials" width="600" height="280"></canvas>
+          <span class="home-body">
+            <span class="home-title">Tutorials</span>
+            <span class="home-desc">Step-by-step lessons with visual diagrams for faces, hands, bodies, and more.</span>
+            <span class="home-go">Open →</span>
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <!-- GRID & GUIDES -->
+    <section id="grid" class="section">
+      <h1>Grid &amp; Guides</h1>
+      <p class="lede">Use a grid to keep proportions accurate. Toggle symmetry axes to mirror your work.</p>
+      <div class="grid-layout">
+        <div class="controls card">
+          <label class="ctl">
+            <span>Grid cell size <em id="cellVal">40px</em></span>
+            <input type="range" id="cellSize" min="10" max="120" value="40" />
+          </label>
+          <label class="ctl">
+            <span>Grid opacity <em id="opacityVal">40%</em></span>
+            <input type="range" id="gridOpacity" min="0" max="100" value="40" />
+          </label>
+          <label class="ctl">
+            <span>Grid color</span>
+            <select id="gridColor">
+              <option value="gray">Gray</option>
+              <option value="blue">Blue</option>
+              <option value="red">Red</option>
+            </select>
+          </label>
+          <label class="ctl toggle">
+            <input type="checkbox" id="showGrid" checked />
+            <span>Show grid</span>
+          </label>
+          <label class="ctl toggle">
+            <input type="checkbox" id="symH" />
+            <span>Horizontal symmetry axis</span>
+          </label>
+          <label class="ctl toggle">
+            <input type="checkbox" id="symV" />
+            <span>Vertical symmetry axis</span>
+          </label>
+
+          <div class="ctl draw-control">
+            <span class="ctl-heading">✏️ Draw</span>
+            <div class="draw-row">
+              <label class="pen-color" title="Pen color">
+                <input type="color" id="penColor" value="#1c2330" />
+              </label>
+              <label class="ctl toggle">
+                <input type="checkbox" id="eraser" />
+                <span>Eraser</span>
+              </label>
+            </div>
+            <label class="ctl">
+              <span>Brush size <em id="brushVal">4px</em></span>
+              <input type="range" id="brushSize" min="1" max="40" value="4" />
+            </label>
+            <button class="btn" id="clearDraw">Clear drawing</button>
+          </div>
+
+          <div class="ctl ref-control" id="refControl" hidden>
+            <span>Reference: <em id="refName"></em></span>
+            <label class="ctl">
+              <span>Reference opacity <em id="refOpacityVal">25%</em></span>
+              <input type="range" id="refOpacity" min="5" max="80" value="25" />
+            </label>
+            <button class="btn" id="clearRef">Remove reference</button>
+          </div>
+        </div>
+        <div class="canvas-wrap card">
+          <div class="canvas-stack" id="canvasStack">
+            <canvas id="gridCanvas" width="640" height="480"></canvas>
+            <canvas id="drawCanvas" width="640" height="480"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLOR PALETTE -->
+    <section id="palette" class="section">
+      <h1>Color Palette Generator</h1>
+      <p class="lede">Pick a harmony. Click it again to roll a new base hue.</p>
+      <div class="harmony-bar" id="harmonyBar">
+        <button class="harmonybtn active" data-harmony="complementary">Complementary</button>
+        <button class="harmonybtn" data-harmony="analogous">Analogous</button>
+        <button class="harmonybtn" data-harmony="triadic">Triadic</button>
+        <button class="harmonybtn" data-harmony="warm">Warm</button>
+        <button class="harmonybtn" data-harmony="cool">Cool</button>
+        <button class="harmonybtn" data-harmony="skin">Skin tones</button>
+      </div>
+      <div class="swatches" id="swatches"></div>
+    </section>
+
+    <!-- POSE REFERENCE -->
+    <section id="poses" class="section">
+      <h1>Pose Reference</h1>
+      <p class="lede">Browse stick-figure poses. Click any thumbnail for a larger view and a tip.</p>
+      <div class="subtabs" id="poseTabs">
+        <button class="subtab active" data-cat="human">Human figures</button>
+        <button class="subtab" data-cat="animal">Animals</button>
+        <button class="subtab" data-cat="action">Action poses</button>
+      </div>
+      <div class="pose-grid" id="poseGrid"></div>
+      <div class="pose-detail card hidden" id="poseDetail">
+        <canvas id="poseDetailCanvas" width="360" height="360"></canvas>
+        <div class="pose-detail-info">
+          <h2 id="poseDetailName"></h2>
+          <p class="tip" id="poseDetailTip"></p>
+          <div class="pose-detail-actions">
+            <button class="btn primary" id="poseDetailTrace">Trace on grid →</button>
+            <button class="btn" id="poseDetailClose">Close</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ART STYLES -->
+    <section id="styles" class="section">
+      <h1>Art Styles</h1>
+      <p class="lede">Explore popular art styles — from anime to abstract. Pick one to inspire your next drawing.</p>
+      <div class="style-grid" id="styleGrid"></div>
+    </section>
+
+    <!-- TUTORIALS -->
+    <section id="tutorials" class="section">
+      <h1>Step-by-step Tutorials</h1>
+      <p class="lede">Reveal one step at a time. Take your time on each.</p>
+      <div class="subtabs" id="tutorialTabs">
+        <button class="subtab active" data-tut="face">Face</button>
+        <button class="subtab" data-tut="eye">Eye</button>
+        <button class="subtab" data-tut="hand">Hand</button>
+        <button class="subtab" data-tut="body">Body</button>
+        <button class="subtab" data-tut="animal">Simple animal</button>
+      </div>
+      <div class="tutorial-area">
+        <div class="tutorial-progress" id="tutorialProgress"></div>
+        <ol class="steps" id="tutorialSteps"></ol>
+        <div class="tutorial-buttons">
+          <button class="btn primary" id="nextStep">Next step</button>
+          <button class="btn" id="startOver">Start over</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/poses.js"></script>
+  <script src="js/tutorials.js"></script>
+  <script src="js/tutorialDraw.js"></script>
+  <script src="js/grid.js"></script>
+  <script src="js/draw.js"></script>
+  <script src="js/palette.js"></script>
+  <script src="js/poseRender.js"></script>
+  <script src="js/styles.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
