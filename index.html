@@ -17,13 +17,47 @@
       <button class="navbtn" data-section="styles">Art Styles</button>
       <button class="navbtn" data-section="tutorials">Tutorials</button>
     </nav>
-    <button id="themeToggle" class="theme-toggle" title="Toggle light/dark">🌙</button>
+    <button id="themeToggle" class="theme-toggle" data-tip="Toggle light / dark" aria-label="Toggle light/dark">🌙</button>
+    <div class="auth-wrap">
+      <button id="authBtn" class="auth-btn">Log in</button>
+      <div class="auth-menu" id="authMenu" hidden>
+        <div class="auth-menu-name" id="authMenuName"></div>
+        <button class="btn" id="logoutBtn">Log out</button>
+      </div>
+    </div>
   </header>
+
+  <!-- Auth modal (local/demo only) -->
+  <div class="auth-modal" id="authModal" hidden>
+    <div class="auth-card login-mode" id="authCard">
+      <button class="auth-close" id="authClose" aria-label="Close">×</button>
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-mode="login">Log in</button>
+        <button class="auth-tab" data-mode="signup">Sign up</button>
+      </div>
+      <form id="authForm">
+        <label class="auth-field signup-only"><span>Name</span>
+          <input id="authName" type="text" autocomplete="name" /></label>
+        <label class="auth-field"><span>Email</span>
+          <input id="authEmail" type="email" autocomplete="email" required /></label>
+        <label class="auth-field"><span>Password</span>
+          <input id="authPass" type="password" autocomplete="current-password" required /></label>
+        <p class="auth-error" id="authError"></p>
+        <button class="btn primary" id="authSubmit" type="submit">Log in</button>
+      </form>
+      <p class="auth-note">Demo only — accounts are stored locally in your browser, not on a server.</p>
+    </div>
+  </div>
 
   <main>
     <!-- HOME -->
     <section id="home" class="section active">
       <div class="hero">
+        <div class="hero-blobs" aria-hidden="true">
+          <span class="blob b1"></span>
+          <span class="blob b2"></span>
+          <span class="blob b3"></span>
+        </div>
         <span class="hero-badge">✦ Free · runs entirely in your browser</span>
         <h1>Your drawing reference toolkit</h1>
         <p class="lede">Everything you need to practice — grids, color, poses, and guided tutorials, all in one place.</p>
@@ -103,8 +137,29 @@
             <span>Vertical symmetry axis</span>
           </label>
 
-          <div class="ctl draw-control">
+          <div class="ctl zoom-control">
+            <span>Zoom <em id="zoomVal">100%</em></span>
+            <div class="zoom-row">
+              <button class="btn zoom-btn" id="zoomOut" title="Zoom out">−</button>
+              <button class="btn zoom-btn" id="zoomReset" title="Reset view">Reset view</button>
+              <button class="btn zoom-btn" id="zoomIn" title="Zoom in">+</button>
+            </div>
+            <label class="ctl toggle pan-toggle">
+              <input type="checkbox" id="panMode" />
+              <span>Pan mode</span>
+            </label>
+            <span class="zoom-hint">⌘/Ctrl+scroll to zoom · scroll or hold Space to pan</span>
+          </div>
+
+          <div class="ctl draw-control" id="drawControl">
             <span class="ctl-heading">✏️ Draw</span>
+            <div class="tool-row" id="toolRow">
+              <button class="tool-btn active" data-tool="draw" data-tip="Freehand">✏️</button>
+              <button class="tool-btn" data-tool="line" data-tip="Line">╱</button>
+              <button class="tool-btn" data-tool="rect" data-tip="Rectangle">▭</button>
+              <button class="tool-btn" data-tool="ellipse" data-tip="Ellipse">◯</button>
+              <button class="tool-btn" data-tool="eyedropper" data-tip="Eyedropper">💧</button>
+            </div>
             <div class="draw-row">
               <label class="pen-color" title="Pen color">
                 <input type="color" id="penColor" value="#1c2330" />
@@ -114,9 +169,14 @@
                 <span>Eraser</span>
               </label>
             </div>
+            <div class="recent-colors" id="recentColors"></div>
             <label class="ctl">
               <span>Brush size <em id="brushVal">4px</em></span>
               <input type="range" id="brushSize" min="1" max="40" value="4" />
+            </label>
+            <label class="ctl">
+              <span>Ink opacity <em id="inkOpacityVal">100%</em></span>
+              <input type="range" id="inkOpacity" min="10" max="100" value="100" />
             </label>
             <button class="btn" id="clearDraw">Clear drawing</button>
           </div>
@@ -127,13 +187,30 @@
               <span>Reference opacity <em id="refOpacityVal">25%</em></span>
               <input type="range" id="refOpacity" min="5" max="80" value="25" />
             </label>
-            <button class="btn" id="clearRef">Remove reference</button>
           </div>
         </div>
         <div class="canvas-wrap card">
-          <div class="canvas-stack" id="canvasStack">
-            <canvas id="gridCanvas" width="640" height="480"></canvas>
-            <canvas id="drawCanvas" width="640" height="480"></canvas>
+          <div class="board-actions board-actions-left">
+            <button class="board-btn" id="importBtn" data-tip="Import image (as reference)" aria-label="Import image">🖼</button>
+          </div>
+          <input type="file" id="importInput" accept="image/*" hidden />
+          <div class="board-actions">
+            <button class="board-btn" id="panBtn" data-tip="Pan / move around" aria-label="Pan">✋</button>
+            <button class="board-btn" id="saveBtn" data-tip="Save drawing" aria-label="Save drawing">💾</button>
+            <button class="board-btn" id="folderBtn" data-tip="Saved drawings" aria-label="Saved drawings">📁</button>
+            <button class="board-btn" id="exportBtn" data-tip="Export as PNG" aria-label="Export as PNG">⬇</button>
+            <button class="board-btn" id="fsBtn" data-tip="Full screen" aria-label="Full screen">⛶</button>
+          </div>
+          <div class="fs-hint" id="fsHint"></div>
+          <canvas id="boardCanvas" class="board"></canvas>
+          <div class="board-gallery" id="boardGallery" hidden>
+            <div class="gallery-panel">
+              <div class="gallery-head">
+                <h3>Saved drawings</h3>
+                <button class="btn" id="galleryClose">Close</button>
+              </div>
+              <div class="gallery-grid" id="galleryGrid"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -142,16 +219,37 @@
     <!-- COLOR PALETTE -->
     <section id="palette" class="section">
       <h1>Color Palette Generator</h1>
-      <p class="lede">Pick a harmony. Click it again to roll a new base hue.</p>
+      <p class="lede">Choose a harmony and shuffle to explore. Lock colors you like, then copy or save the set.</p>
       <div class="harmony-bar" id="harmonyBar">
         <button class="harmonybtn active" data-harmony="complementary">Complementary</button>
+        <button class="harmonybtn" data-harmony="split-complementary">Split-complementary</button>
         <button class="harmonybtn" data-harmony="analogous">Analogous</button>
         <button class="harmonybtn" data-harmony="triadic">Triadic</button>
+        <button class="harmonybtn" data-harmony="tetradic">Tetradic</button>
+        <button class="harmonybtn" data-harmony="monochromatic">Monochromatic</button>
         <button class="harmonybtn" data-harmony="warm">Warm</button>
         <button class="harmonybtn" data-harmony="cool">Cool</button>
+        <button class="harmonybtn" data-harmony="pastel">Pastel</button>
+        <button class="harmonybtn" data-harmony="neon">Neon</button>
+        <button class="harmonybtn" data-harmony="earth">Earth</button>
         <button class="harmonybtn" data-harmony="skin">Skin tones</button>
       </div>
+      <div class="palette-toolbar">
+        <label class="base-pick" title="Base color">
+          <input type="color" id="baseColor" value="#6366f1" />
+          <span>Base color</span>
+        </label>
+        <button class="btn" id="shuffleBtn">🎲 Shuffle</button>
+        <button class="btn" id="copyBtn">⧉ Copy CSS</button>
+        <button class="btn" id="saveBtn">💾 Save</button>
+        <span class="palette-hint">Press <kbd>Space</kbd> to shuffle · click a swatch to copy · 🔓 to lock</span>
+      </div>
       <div class="swatches" id="swatches"></div>
+      <div class="saved-wrap" id="savedWrap" hidden>
+        <h2 class="saved-title">Saved palettes</h2>
+        <div class="saved-list" id="savedList"></div>
+      </div>
+      <div class="toast" id="paletteToast" hidden></div>
     </section>
 
     <!-- POSE REFERENCE -->
@@ -184,6 +282,12 @@
       <div class="style-grid" id="styleGrid"></div>
     </section>
 
+    <!-- ART STYLE DETAIL -->
+    <section id="styleDetail" class="section">
+      <button class="btn back-btn" id="styleBack">← All styles</button>
+      <div id="styleDetailBody"></div>
+    </section>
+
     <!-- TUTORIALS -->
     <section id="tutorials" class="section">
       <h1>Step-by-step Tutorials</h1>
@@ -209,11 +313,11 @@
   <script src="js/poses.js"></script>
   <script src="js/tutorials.js"></script>
   <script src="js/tutorialDraw.js"></script>
-  <script src="js/grid.js"></script>
-  <script src="js/draw.js"></script>
+  <script src="js/board.js"></script>
   <script src="js/palette.js"></script>
   <script src="js/poseRender.js"></script>
   <script src="js/styles.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

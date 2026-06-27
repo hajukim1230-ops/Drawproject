@@ -4,23 +4,75 @@
   const TAU = Math.PI * 2;
 
   window.ART_STYLES = [
-    { key: "anime", name: "Anime", desc: "Big glossy eyes, layered hair, clean cel shading.",
-      credit: "Original illustration — no public-domain anime exists" },
-    { key: "realism", name: "Realism", desc: "Lifelike proportions with soft, gradual shading.",
-      img: "images/realism.jpg", credit: "Ilya Repin, Barge Haulers on the Volga (1870–73) · Public domain" },
-    { key: "chibi", name: "Chibi", desc: "Super-deformed: huge head, tiny body, maximum cute.",
-      credit: "Original illustration — no public-domain example" },
-    { key: "cartoon", name: "Cartoon", desc: "Bouncy shapes, bold linework, expressive features.",
-      img: "images/cartoon.jpg", credit: "Winsor McCay, Little Nemo in Slumberland (1906) · Public domain" },
-    { key: "popart", name: "Pop Art", desc: "Flat bright color and Ben-Day halftone dots.",
-      credit: "Original illustration — Pop Art works remain copyrighted" },
-    { key: "pixel", name: "Pixel Art", desc: "Built from a grid of chunky colored pixels.",
-      credit: "Original illustration" },
-    { key: "surreal", name: "Surreal", desc: "Dreamlike, impossible scenes that bend reality.",
-      img: "images/surreal.jpg", credit: "Hieronymus Bosch, The Garden of Earthly Delights (c. 1500) · Public domain" },
-    { key: "abstract", name: "Abstract", desc: "Pure shape, color, and line — no literal subject.",
-      img: "images/abstract.jpg", credit: "Wassily Kandinsky, Composition VII (1913) · Public domain" },
+    { key: "anime", name: "Anime", desc: "Big glossy eyes, layered hair, clean cel shading." },
+    { key: "realism", name: "Realism", desc: "Lifelike proportions with soft, gradual shading." },
+    { key: "chibi", name: "Chibi", desc: "Super-deformed: huge head, tiny body, maximum cute." },
+    { key: "cartoon", name: "Cartoon", desc: "Bouncy shapes, bold linework, expressive features." },
+    { key: "popart", name: "Pop Art", desc: "Flat bright color and Ben-Day halftone dots." },
+    { key: "pixel", name: "Pixel Art", desc: "Built from a grid of chunky colored pixels." },
+    { key: "surreal", name: "Surreal", desc: "Dreamlike, impossible scenes that bend reality." },
+    { key: "abstract", name: "Abstract", desc: "Pure shape, color, and line — no literal subject." },
   ];
+
+  // Detailed explanations shown on each style's page.
+  window.STYLE_INFO = {
+    anime: {
+      tagline: "The stylized look of Japanese animation & manga",
+      about: "Anime is the distinctive illustration style associated with Japanese animation and comics (manga). Characters are drawn with large, expressive eyes, simplified noses and mouths, and clean linework filled with flat “cel” shading.",
+      origin: "It took shape in mid-20th-century Japan, led by pioneers like Osamu Tezuka (Astro Boy), who borrowed the big-eyed look partly from early Western cartoons. It became a global phenomenon from the 1990s onward.",
+      traits: ["Large, detailed eyes with bright highlights", "Tiny, simplified nose and mouth", "Bold, colorful, gravity-defying hair in chunky clumps", "Crisp outlines with flat, hard-edged cel shading", "Exaggerated emotions (blush, sweat drops, sparkles)"],
+      tips: ["Place the eyes low and make them large", "Reduce the nose to a small mark", "Use just a few hard-edged shadow shapes", "Design hair as big clumps, not individual strands"],
+    },
+    realism: {
+      tagline: "Depicting subjects as the eye actually sees them",
+      about: "Realism aims to render subjects believably — with accurate proportions and perspective, and the gradual play of light and shadow that gives forms a sense of volume and weight.",
+      origin: "As a movement, Realism began in mid-19th-century France (Courbet, Millet), rejecting idealized Romantic subjects for ordinary life. The pursuit of lifelike rendering itself reaches back to the Renaissance.",
+      traits: ["Accurate proportions and anatomy", "Smooth, gradual value transitions", "A consistent, observed light source", "Subtle color shifts and fine detail"],
+      tips: ["Always work from reference", "Squint to find the big light/shadow shapes first", "Blend transitions and protect your highlights", "Measure to check proportions as you go"],
+    },
+    chibi: {
+      tagline: "Cute, “super-deformed” mini characters",
+      about: "Chibi (Japanese for “short/small”) shrinks a character into an adorable caricature: a huge head on a tiny body, oversized eyes, and the absolute minimum of detail.",
+      origin: "A playful sub-style of anime and manga, chibi spread through Japanese pop culture, games, and merchandise. The name literally means “small child / short person.”",
+      traits: ["Only 2–3 heads tall overall", "Enormous head and eyes", "Tiny, simplified body, hands, and feet", "Rounded shapes everywhere", "Maximum cuteness, minimum detail"],
+      tips: ["Make the head about half the total height", "Simplify limbs to little nubs", "Keep facial features low and large", "Round everything — and resist adding detail"],
+    },
+    cartoon: {
+      tagline: "Bold, exaggerated shapes built for expression",
+      about: "Cartooning simplifies and exaggerates forms for clarity, humor, and appeal. Shapes are bouncy, outlines are bold, and features are pushed for maximum expression.",
+      origin: "It grew out of newspaper comic strips and early animation in the late 1800s and early 1900s (Winsor McCay, then the big animation studios).",
+      traits: ["Strong, readable silhouettes", "Thick, confident outlines", "Simplified, rounded shapes", "Exaggerated features and poses", "Flat color and “squash and stretch”"],
+      tips: ["Start from simple shapes", "Exaggerate the main action", "Keep the silhouette clear", "Vary your line weight and avoid over-detailing"],
+    },
+    popart: {
+      tagline: "Mass-culture imagery, loud and graphic",
+      about: "Pop Art borrows imagery from advertising, comics, and consumer culture, rendering it in flat, vivid color with graphic outlines and printing-style halftone dots.",
+      origin: "It emerged in 1950s–60s Britain and the US. Andy Warhol and Roy Lichtenstein are its most famous figures (their actual works are still under copyright).",
+      traits: ["Flat, saturated primary colors", "Bold black outlines", "Ben-Day / halftone dot patterns", "Repetition and everyday or commercial subjects"],
+      tips: ["Limit yourself to a few bold colors", "Outline everything in solid black", "Use dot patterns instead of soft shading", "Keep it flat — no gradients"],
+    },
+    pixel: {
+      tagline: "Images built one pixel at a time",
+      about: "Pixel art is a digital style where images are crafted pixel by pixel on a small grid, embracing the chunky, blocky look of early video games.",
+      origin: "It was born from the hardware limits of 1970s–80s arcades and consoles (like the NES). Today it’s a deliberate, beloved retro art form.",
+      traits: ["Low resolution and a limited palette", "Visible square pixels", "Clean one-pixel outlines", "Dithering to fake gradients", "Readable even at tiny sizes"],
+      tips: ["Start small (try a 16×16 grid)", "Keep your palette tight", "Avoid stray “orphan” pixels", "Use dithering rather than blurring"],
+    },
+    surreal: {
+      tagline: "Dreamlike, reality-bending imagery",
+      about: "Surrealism juxtaposes unrelated objects and bends reality to evoke the logic of dreams and the unconscious — melting clocks, floating forms, and impossible spaces.",
+      origin: "A 1920s avant-garde movement launched by André Breton. Salvador Dalí and René Magritte are its iconic painters (their works remain under copyright).",
+      traits: ["Impossible scenes rendered believably", "Unexpected juxtapositions", "Dream logic and symbolism", "Distorted scale and gravity"],
+      tips: ["Combine two unrelated things", "Render the impossible with convincing light and shadow", "Play with scale", "Let mood and symbolism lead over literal accuracy"],
+    },
+    abstract: {
+      tagline: "Shape, color, and line for their own sake",
+      about: "Abstract art steps away from depicting real objects, using pure shape, color, line, and composition to convey feeling, rhythm, or simple visual interest.",
+      origin: "It was pioneered in the early 20th century by artists like Wassily Kandinsky and Piet Mondrian, who pushed art toward non-representation.",
+      traits: ["Non-representational — no literal subject", "Emphasis on composition and balance", "Expressive use of color", "Geometric or gestural shapes"],
+      tips: ["Focus on balance and contrast", "Let color carry the mood", "Vary shape sizes and spacing", "Don’t try to depict anything — feel the composition"],
+    },
+  };
 
   // ---- helpers ----
   function disc(ctx, x, y, r) { ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fill(); }
